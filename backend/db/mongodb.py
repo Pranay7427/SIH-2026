@@ -14,8 +14,17 @@ logger = logging.getLogger("dam_breach.db")
 MONGODB_URI = os.getenv("MONGODB_URI", "")
 DB_NAME = os.getenv("MONGODB_DB_NAME", "dam_flood_simulation")
 
-LOCAL_STORE_DIR = Path(__file__).resolve().parent.parent / "data" / "local_db"
-LOCAL_STORE_DIR.mkdir(parents=True, exist_ok=True)
+if os.getenv("VERCEL") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"):
+    LOCAL_STORE_DIR = Path("/tmp/local_db")
+else:
+    LOCAL_STORE_DIR = Path(__file__).resolve().parent.parent / "data" / "local_db"
+
+try:
+    LOCAL_STORE_DIR.mkdir(parents=True, exist_ok=True)
+except Exception:
+    LOCAL_STORE_DIR = Path("/tmp/local_db")
+    LOCAL_STORE_DIR.mkdir(parents=True, exist_ok=True)
+
 LOCAL_USERS_FILE = LOCAL_STORE_DIR / "users.json"
 LOCAL_SIMS_FILE = LOCAL_STORE_DIR / "simulations.json"
 

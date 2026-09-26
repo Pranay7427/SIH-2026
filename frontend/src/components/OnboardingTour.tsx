@@ -76,7 +76,7 @@ export const OnboardingTour: React.FC<OnboardingTourProps> = ({ run, onFinish })
           allowClose: true,
           stagePadding: 5,
           overlayOpacity: 0.7,
-          onPopoverRender: (popover, { state }) => {
+          onPopoverRender: () => {
             // Play sound on step change
             soundEffects.playClickSound();
           },

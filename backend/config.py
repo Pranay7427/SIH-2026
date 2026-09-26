@@ -4,8 +4,18 @@ from pathlib import Path
 # Base directories
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
-OUTPUTS_DIR = BASE_DIR / "sim_outputs"
-OUTPUTS_DIR.mkdir(parents=True, exist_ok=True)
+
+# Ensure output directory works in serverless read-only environments (e.g. Vercel)
+if os.getenv("VERCEL") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"):
+    OUTPUTS_DIR = Path("/tmp/sim_outputs")
+else:
+    OUTPUTS_DIR = BASE_DIR / "sim_outputs"
+
+try:
+    OUTPUTS_DIR.mkdir(parents=True, exist_ok=True)
+except Exception:
+    OUTPUTS_DIR = Path("/tmp/sim_outputs")
+    OUTPUTS_DIR.mkdir(parents=True, exist_ok=True)
 
 # Delft3D FM configuration
 DELFT3D_BIN_PATH = os.getenv("DELFT3D_BIN_PATH", "dflowfm.exe")
