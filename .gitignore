@@ -77,3 +77,4 @@ backend/sim_outputs/*
 ehthumbs.db
 Thumbs.db
 Desktop.ini
+.vercel
